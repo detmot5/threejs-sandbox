@@ -93,3 +93,121 @@ const cubeTexture = new THREE.CubeTextureLoader()
 ] );
 
 scene.background = cubeTexture
+
+function createCube(x, y, z, width, height, depth, seg, mater, color, castShad, receiveShad, shin) {
+  var geometry = new THREE.BoxGeometry(width, height, depth, seg, seg, seg);
+
+  var figure = new THREE.Mesh(geometry, createMaterial(mater, color, shin));
+
+  figure.position.set(x, y, z);
+
+  cube.receiveShadow = receiveShad;
+  cube.castShadow = castShad;
+
+  return figure;
+}
+
+function createTorus(x, y, z, radius, tube, seg, mater, color, castShad, receiveShad, shin) {
+  var geometry = new THREE.TorusGeometry(radius, tube, seg, seg);
+
+  var figure = new THREE.Mesh(geometry, createMaterial(mater, color, shin));
+
+  figure.position.set(x, y, z);
+
+  torus.receiveShadow = receiveShad;
+  torus.castShadow = castShad;
+
+  return figure;
+}
+
+function createCylinder(x, y, z, radiusTop, radiusBottom, height, seg, mater, color, castShad, receiveShad, shin) {
+  var geometry = new THREE.CylinderGeometry(radiusTop, radiusBottom, height, seg);
+
+  var figure = new THREE.Mesh(geometry, createMaterial(mater, color, shin));
+
+  figure.position.set(x, y, z);
+
+  figure.receiveShadow = receiveShad;
+  figure.castShadow = castShad;
+
+  return figure;
+}
+
+function createSphere(x, y, z, radius, seg, mater, color, castShad, receiveShad, shin) {
+  var geometry = new THREE.SphereGeometry(radius, seg, seg);
+
+  var figure = new THREE.Mesh(geometry, createMaterial(mater, color, shin));
+
+  figure.position.set(x, y, z);
+
+  figure.receiveShadow = receiveShad;
+  figure.castShadow = castShad;
+
+  return figure;
+}
+
+function createPlain(width, height, color, nOfSeg, mater, castShad, receiveShad, x, y, z, shin) {
+  var planeGeometry = new THREE.PlaneGeometry(width, height, nOfSeg, nOfSeg);
+
+  switch (mater) {
+    case "basic":
+      var material = new THREE.MeshBasicMaterial({ color: color, side: THREE.DoubleSide });
+      break;
+    case "lambert":
+      var material = new THREE.MeshLambertMaterial({ color: color, side: THREE.DoubleSide });
+      break;
+    case "phong":
+      var material = new THREE.MeshPhongMaterial({ color: color, shininess: shin, side: THREE.DoubleSide });
+      break;
+    default:
+      console.log("are you retarted?");
+  }
+
+  var figure = new THREE.Mesh(planeGeometry, material);
+
+  figure.receiveShadow = receiveShad;
+  figure.castShadow = castShad;
+
+  figure.position.set(x, y, z);
+
+  figure.rotation.x = 90;
+
+  return figure;
+}
+
+function createDirectLight(color, intensity, distance, x, y, z) {
+
+  var light = new THREE.DirectionalLight(color, intensity, distance);
+  light.castShadow = true; // default false
+
+  light.position.set(x, y, z);
+
+  return light;
+}
+
+function createPointLight(color, intensity, distance, x, y, z) {
+  var light = new THREE.PointLight(color, intensity, distance);
+  light.castShadow = true;
+
+  light.position.set(x, y, z);
+
+  return light
+}
+
+function createMaterial(mater, color, shin) {
+  switch (mater) {
+    case "basic":
+      var material = new THREE.MeshBasicMaterial({ color: color });
+      break;
+    case "lambert":
+      var material = new THREE.MeshLambertMaterial({ color: color });
+      break;
+    case "phong":
+      var material = new THREE.MeshPhongMaterial({ color: color, shininess: shin });
+      break;
+    default:
+      console.log("are you retarted?");
+  }
+
+  return material;
+}
